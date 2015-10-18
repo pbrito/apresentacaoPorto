@@ -46,35 +46,35 @@ export function _time(state = initialTimeState, action) {
 //     if (uistate.activeitem == 0)
 //       uistate.activeitem = -1;
 
-// export function mouseReducer(state = {mousex: 0,mousey:0}, action) {
-//     console.log('userReducer was called with state', state, 'and action', action)
-//
-//     switch (action.type) {
-//           case 'MOUSE_MOVE':
-//             return {
-//               ...state,
-//               mousex: action.value_x,
-//               mousey: action.value_y
-//             }
-//           case 'MOUSE_DOWN':
-//             return {
-//               ...state,
-//               mousedown: true,
-//               mouseup: false
-//             }
-//           case 'MOUSE_UP':
-//             return {
-//               ...state,
-//               mousedown: false,
-//               mouseup: true
-//             }
-//           case 'HOT_ITEM':
-//             return {
-//               ...state,
-//               hotitem : action.id
-//             }
-//
-//           default:
-//             return state;
-//     }
-// }
+export function mouseReducer(state = {mousex: 0,mousey:0}, action) {
+    console.log('userReducer was called with state', state, 'and action', action)
+
+    switch (action.type) {
+          case 'MOUSE_MOVE':
+            return {
+              ...state,
+              mousex: action.value_x,
+              mousey: action.value_y
+            }
+          case 'MOUSE_DOWN':
+            return {
+              ...state,
+              mousedown: true,
+              mouseup: false
+            }
+          case 'MOUSE_UP':
+            return {
+              ...state,
+              mousedown: false,
+              mouseup: true
+            }
+          case 'HOT_ITEM':
+            return {
+              ...state,
+              hotitem : action.id
+            }
+
+          default:
+            return state;
+    }
+}
