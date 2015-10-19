@@ -79,6 +79,11 @@ import * as actionCreators from './action-creators'
 
 
 export default class Home extends React.Component {
+  constructor(props) {
+   super(props);
+    this.height =undefined;
+ }
+
   onTimeButtonClick () {
 
     // This button handler will dispatch an action in response to a click event from a user.
@@ -102,9 +107,48 @@ regionhit ( x,  y,  w,  h){
   }
 
 
+componentDidUpdate(){
 
+console.log("iiieieeiieee");
+console.log( this.height );
+if(this.height)
+{this.props.dispatch(this.height )
+this.height=undefined
+}
+
+     console.log("###111#########");
+};
 
 desenhaButao(num,top,left,width){
+
+  //this.props.dispatch( {
+    //    type: 'HOT_ITEM', id: "id"
+    //  })
+
+
+    var uistate=this.props.reduxState.mouseReducer;
+
+  if( uistate.hotitem!==undefined
+  || (uistate.hotitem==undefined && this.regionhit ( 100,  300,  50,  49))
+  )
+  {     if (this.regionhit ( 100,  300,  50,  49) && uistate.hotitem!=="id2")
+        {
+          this.height=( {
+               type: 'HOT_ITEM', id: "id2"
+             })
+        }else
+          if (this.regionhit ( 160,  300,  50,  49) && uistate.hotitem!=="id3")
+           {
+             this.height=( {
+                  type: 'HOT_ITEM', id: "id3"
+                })
+           }
+
+         else {
+         }
+  }
+
+
  if (this.regionhit( left,top, width, 49))
  return(
    <div style={{position: "absolute",
@@ -129,7 +173,10 @@ desenhaButao(num,top,left,width){
 
   desenhaMenu(){
     return(<div>
-    
+      {this.desenhaButao(1,300,100,50)}
+      {this.desenhaButao("ya",300,160,50)}
+      {this.desenhaButao("no",300,220,50)}
+
       {/*
             <Menu
               menuStore={visibleTodos}
@@ -141,7 +188,7 @@ desenhaButao(num,top,left,width){
 
   }
 
-  render () {
+  render ( element,  container) {
 
     // Thanks to our @connect decorator, we're able to get the data previously selected through the props.
     var { frozen, time, reduxState } = this.props
