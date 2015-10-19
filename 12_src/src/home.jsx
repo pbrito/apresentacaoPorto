@@ -1,71 +1,11 @@
 // Tutorial 12 - Provider-and-connect.js
 
-// Our tutorial is almost over and the only missing piece to leave you with a good overview of Redux is:
-// How do we read from our store's state and how do we dispatch actions?
-
-// Both of these questions can be answered using a single react-redux's binding: @connect class decorator.
-
-// As we previously explained, when using the Provider component we allow all components of our app to
-// access Redux. But this access can only be made through the undocumented feature "React's context". To
-// avoid asking you to use such "dark" React API, Redux is exposing a decorator (an ES7 feature that
-// makes it possible to annotate and modify classes and properties at design time -
-// https://github.com/wycats/javascript-decorators) that you can use on a component class.
-
-// The "connect" decorator (written @connect) literally connects your component with your Redux's store.
-// By doing so, it provides your store's dispatch function through a component's prop and also adds any
-// properties you want to expose as part of your store's state.
-
-// Using @connect, you'll turn a dumb component (https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0),
-// into a smart component with very little code overhead.
-
-// Please note also that you are not forced to use this ES7 decorator notation if you don't like it:
-/*
-  @somedecorator
-  export default class MyClass {}
-
-  // is the same as:
-
-  class MyClass {}
-  export default somedecorator(MyClass)
-
-  // Using Redux's connect decorator, those are equivalent:
-  let mapStateToProps = (state) => { ... }
-
-  @connect(mapStateToProps)
-  export default class MyClass {}
-
-  // is the same as:
-
-  class MyClass {}
-  export default connect(mapStateToProps)(MyClass)
-*/
-
 import React from 'react'
 import { connect } from 'react-redux'
 // We use the same ES6 import trick to get all action creators and produce a hash like we did with
 // our reducers. If you haven't yet, go get a look at our action creator (./actions-creators.js).
 import * as actionCreators from './action-creators'
 
-// The "connect" decorator is designed to address all use-cases, from the most simple to the most
-// complex ones. In the present example, we're not going to use the most complex form of 'connect' but
-// you can find all information about it in the complete 'connect' API documentation here:
-// https://github.com/rackt/react-redux/blob/v4.0.0/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options
-
-// Here is the complete 'connect' signature:
-// connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])
-
-// We will only focus here on the first 'connect' parameter: mapStateToProps...
-
-// The "connect" decorator takes, as first parameter, a function that will select which slice of your
-// state you want to expose to your component. This function is logically called a "selector" and
-// receives 2 parameters: the state of your store and the current props of your component.
-// The "mapStateToProps" name that we gave above is just a semantic name for our function that clearly
-// express what the function does: it maps (understand "extract some of") the state to few component props.
-// The props of the component are provided to handle common case like extracting a slice of your
-// state depending on a prop value (Ex: state.items[props.someID]).
-// The "selector"  function is expected to return the props that you wish to expose to your component (usually via
-// an object literal). It's up to you to eventually transform the state you're receiving before returning it.
-// You can have a look right at that simplest 'connect' usage below.
 
 @connect((state/*, props*/) => {
     // This is our select function that will extract from the state the data slice we want to expose
@@ -95,87 +35,136 @@ export default class Home extends React.Component {
   }
 
   // Check whether current mouse position is within a rectangle
-regionhit ( x,  y,  w,  h){
+  regionhit ( x,  y,  w,  h){
+    var uistate=this.props.reduxState.mouseReducer
+    if (uistate.mousex < x ||
+      uistate.mousey < y ||
+      uistate.mousex >= x + w ||
+      uistate.mousey >= y + h)
+      return false;
+      return true;
+    }
 
-  var uistate=this.props.reduxState.mouseReducer
-     if (uistate.mousex < x ||
-         uistate.mousey < y ||
-         uistate.mousex >= x + w ||
-         uistate.mousey >= y + h)
-       return false;
-     return true;
-  }
 
+    componentDidUpdate(){
+      if(this.height)
+      {this.props.dispatch(this.height )
+        this.height=undefined
+      }
 
-componentDidUpdate(){
+      console.log("###111#########");
+    };
 
-console.log("iiieieeiieee");
-console.log( this.height );
-if(this.height)
-{this.props.dispatch(this.height )
-this.height=undefined
-}
-
-     console.log("###111#########");
-};
-
-desenhaButao(num,top,left,width){
+desenhaButao(id,top,left){
 
   //this.props.dispatch( {
     //    type: 'HOT_ITEM', id: "id"
     //  })
 
 
-    var uistate=this.props.reduxState.mouseReducer;
+  var uistate=this.props.reduxState.mouseReducer;
+ var hotitem="1"
 
-  if( uistate.hotitem!==undefined
-  || (uistate.hotitem==undefined && this.regionhit ( 100,  300,  50,  49))
-  )
-  {     if (this.regionhit ( 100,  300,  50,  49) && uistate.hotitem!=="id2")
-        {
-          this.height=( {
-               type: 'HOT_ITEM', id: "id2"
-             })
-        }else
-          if (this.regionhit ( 160,  300,  50,  49) && uistate.hotitem!=="id3")
-           {
-             this.height=( {
-                  type: 'HOT_ITEM', id: "id3"
-                })
-           }
-
-         else {
-         }
+  // Check whether the button should be hot
+  if (this.regionhit(left, top, 64, 48))
+  {
+    hotitem = id;
+    if (uistate.activeitem == 0 && uistate.mousedown)
+      uistate.activeitem = id;
   }
 
 
- if (this.regionhit( left,top, width, 49))
- return(
-   <div style={{position: "absolute",
-   top: top+"px",
-   left: left+"px",
-   backgroundColor: "blue",
-   width: width+"px",
-   height: "50px",
-   textAlign: "center"
-   }}>{num}</div>)
+var cor="red";
+  if (uistate.hotitem == id)
+{
+  if (uistate.activeitem == id)
+  {
+    // Button is both 'hot' and 'active'
+    cor="yellow";
+  }
+  else
+  {
+    // Button is merely 'hot'
+    cor="blue";
+  }
+}
+else
+{
+  // button is not hot, but it may be active
+  cor="brown";
+}
+ var ret=0;
+if (uistate.mousedown == 0 &&
+      hotitem == id &&
+      uistate.activeitem == id)
+    ret= 1;
+else  // Otherwise, no clicky.
+  ret= 0;
+  this.height=( {
+                type: 'HOT_ITEM', id: hotitem
+              })
 
-  return(
-    <div style={{position: "absolute",
-    top: top+"px",
-    left: left+"px",
-    backgroundColor: "red",
-    width: width+"px",
-    height: "50px",
-    textAlign: "center"
-    }}>{num}</div>)
+return (
+  <div style={{position: "absolute",
+  top: top+"px",
+  left: left+"px",
+  backgroundColor: cor,
+  width: 64+"px",
+  height: "50px",
+  textAlign: "center"
+}}>{id}</div>)
+
+ //
+ //  if( uistate.hotitem!==undefined
+ //  || (uistate.hotitem==undefined && this.regionhit ( 100,  300,   64, 48))
+ //  )
+ //  {     if (this.regionhit ( 100,  300, 64, 48) && uistate.hotitem!==num)
+ //        {
+ //          this.height=( {
+ //               type: 'HOT_ITEM', id: num
+ //             })
+ //        }else
+ //          if (this.regionhit ( 160,  300,   64, 48) && uistate.hotitem!==num)
+ //           {
+ //             this.height=( {
+ //                  type: 'HOT_ITEM', id: num
+ //                })
+ //           }
+ //
+ //         else {
+ //         }
+ //  }
+ //
+ //
+ // if (this.regionhit( left,top,  64, 48))
+ // return(
+ //   <div style={{position: "absolute",
+ //   top: top+"px",
+ //   left: left+"px",
+ //   backgroundColor: "blue",
+ //   width: 64+"px",
+ //   height: "50px",
+ //   textAlign: "center"
+ //   }}>{num}</div>)
+ //
+ //  return(
+ //    <div style={{position: "absolute",
+ //    top: top+"px",
+ //    left: left+"px",
+ //    backgroundColor: "red",
+ //    width: 64+"px",
+ //    height: "50px",
+ //    textAlign: "center"
+ //    }}>{num}</div>)
+ //
+ //
 }
 
   desenhaMenu(){
     return(<div>
-      {this.desenhaButao(1,300,100,50)}
-      {this.desenhaButao("ya",300,160,50)}
-      {this.desenhaButao("no",300,220,50)}
+      {this.desenhaButao(1,300,100)}
+      {this.desenhaButao("ya",300,160)}
+      {this.desenhaButao("no",300,220)}
 
       {/*
             <Menu
