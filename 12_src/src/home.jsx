@@ -5,69 +5,31 @@
 
 // Both of these questions can be answered using a single react-redux's binding: @connect class decorator.
 
-// As we previously explained, when using the Provider component we allow all components of our app to
+// As we explained previously, when using the Provider component, we allow all components of our app to
 // access Redux. But this access can only be made through the undocumented feature "React's context". To
 // avoid asking you to use such "dark" React API, Redux is exposing a decorator (an ES7 feature that
 // makes it possible to annotate and modify classes and properties at design time -
 // https://github.com/wycats/javascript-decorators) that you can use on a component class.
 
-// The "connect" decorator (written @connect) literally connects your component with your Redux's store.
-// By doing so, it provides your store's dispatch function through a component's prop and also adds any
-// properties you want to expose as part of your store's state.
+// The "connect" decorator literally connects your component with your Redux's store. By doing so,
+// it provides your store's dispatch function through a component's prop and also adds any
+// properties you want to expose part of your store's state.
 
 // Using @connect, you'll turn a dumb component (https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0),
 // into a smart component with very little code overhead.
 
-// Please note also that you are not forced to use this ES7 decorator notation if you don't like it:
-/*
-  @somedecorator
-  export default class MyClass {}
-
-  // is the same as:
-
-  class MyClass {}
-  export default somedecorator(MyClass)
-
-  // Using Redux's connect decorator, those are equivalent:
-  let mapStateToProps = (state) => { ... }
-
-  @connect(mapStateToProps)
-  export default class MyClass {}
-
-  // is the same as:
-
-  class MyClass {}
-  export default connect(mapStateToProps)(MyClass)
-*/
-
 import React from 'react'
 import { connect } from 'react-redux'
 // We use the same ES6 import trick to get all action creators and produce a hash like we did with
-// our reducers. If you haven't yet, go get a look at our action creator (./actions-creators.js).
+// our reducers. If you haven't yet, go get a look at our action creator (./actions-creator.js).
 import * as actionCreators from './action-creators'
 
-// The "connect" decorator is designed to address all use-cases, from the most simple to the most
-// complex ones. In the present example, we're not going to use the most complex form of 'connect' but
-// you can find all information about it in the complete 'connect' API documentation here:
-// https://github.com/rackt/react-redux/blob/v4.0.0/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options
-
-// Here is the complete 'connect' signature:
-// connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])
-
-// We will only focus here on the first 'connect' parameter: mapStateToProps...
-
-// The "connect" decorator takes, as first parameter, a function that will select which slice of your
+// The "connect" decorator takes as its only parameter, a function that will select which slice of your
 // state you want to expose to your component. This function is logically called a "selector" and
 // receives 2 parameters: the state of your store and the current props of your component.
-// The "mapStateToProps" name that we gave above is just a semantic name for our function that clearly
-// express what the function does: it maps (understand "extract some of") the state to few component props.
 // The props of the component are provided to handle common case like extracting a slice of your
 // state depending on a prop value (Ex: state.items[props.someID]).
-// The "selector"  function is expected to return the props that you wish to expose to your component (usually via
-// an object literal). It's up to you to eventually transform the state you're receiving before returning it.
-// You can have a look right at that simplest 'connect' usage below.
-
-@connect((state/*, props*/) => {
+@connect((state /*, props*/) => {
     // This is our select function that will extract from the state the data slice we want to expose
     // through props to our component.
     return {
@@ -76,50 +38,62 @@ import * as actionCreators from './action-creators'
       time: state._time.time
     }
 })
-
-
 export default class Home extends React.Component {
   constructor(props) {
    super(props);
     this.height =[];
+    var uistate=this.props.reduxState.mouseReducer
+    if(uistate.activeitem!==0 )
+     this.height.push( {
+            type: 'ACTIVE_ITEM', id: 0
+    })
+
+
+
  }
 
   onTimeButtonClick () {
-
-    // This button handler will dispatch an action in response to a click event from a user.
-    // We use here the dispatch function "automatically" provided by @connect in a prop.
-    // There are alternatives way to call actionCreators that are already bound to dispatch and those
-    // imply to provide the second parameter to 'connect':
-    // https://github.com/rackt/react-redux/blob/v4.0.0/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options
+    // This button handler will dispatch an action in response to a
+    // click event from a user. We use here the dispatch function provided by @connect in a prop.
     this.props.dispatch(actionCreators.getTime())
   }
-
   // Check whether current mouse position is within a rectangle
 regionhit ( x,  y,  w,  h){
 
-  var uistate=this.props.reduxState.mouseReducer
-     if (uistate.mousex < x ||
-         uistate.mousey < y ||
-         uistate.mousex >= x + w ||
-         uistate.mousey >= y + h)
-       return false;
-     return true;
-  }
+var uistate=this.props.reduxState.mouseReducer
+   if (uistate.mousex < x ||
+       uistate.mousey < y ||
+       uistate.mousex >= x + w ||
+       uistate.mousey >= y + h)
+     return false;
+   return true;
+}
 
 
 componentDidUpdate(){
 
-console.log("iiieieeiieee");
-console.log( this.height );
-if(this.height.length>0)
-{
-  this.height.map( act =>
-    this.props.dispatch(act)
-  )
+ if(this.height.length>1)
+ {
+  //  alert("zzzzzz")
+  //  alert(this.height.length)
+  // this.height.map(
+  //   a=>console.log(a.id+"  zzzzz  "+a.type)
+  // )
+  //  this.height.map( act =>
+  //     //this.props.dispatch(act)
+  //     alert("\nKAAABOOMMMM\n\n"+act.id+"  "+act.type+" \n ")
+  //  )
+     this.props.dispatch(this.height[this.height.length-1])
 }
+else {
+if(this.height[0]){
+  this.props.dispatch(this.height[0])}
+}
+
 this.height=[]
-     console.log("###111#########");
 };
+
+
 
 desenhaButao(num,top,left){
 
@@ -151,15 +125,21 @@ desenhaButao(num,top,left){
 
 //_________________
 
-
+console.log("xxxxx"+uistate.mousex+uistate.mousey);
   if (uistate.activeitem == num)
     {  if (uistate.mouseup)
-          if(uistate.hotitem==num )  console.log("oi")
-           if(uistate.activeitem!==num )
-            this.height.push( {
-                   type: 'ACTIVE_ITEM', id: undefined
-                 })
-
+          {
+          if(uistate.hotitem==num )  {
+              alert("click")
+          }
+          // set notActive
+          if(uistate.activeitem!==0 )
+           {
+             this.height.push( {
+                  type: 'ACTIVE_ITEM', id: 0
+                })
+            }
+        }
     }
   else{
       if(uistate.hotitem==num )
@@ -170,14 +150,33 @@ desenhaButao(num,top,left){
                    })
           }
   }
-
+  //if inside
   if (this.regionhit ( left ,  top , 60,  48)){
-       if(uistate.hotitem!==num )
+            if(uistate.activeitem==0 )
+              {
+                if(uistate.hotitem!==num )
                 this.height.push( {
                    type: 'HOT_ITEM', id: num
                  })
-
+               }
+            if(uistate.activeitem==num ){
+              if(uistate.hotitem!==num )
+              this.height.push( {
+                 type: 'HOT_ITEM', id: num
+               })
+            }
     }
+    //if outside
+    if (!this.regionhit ( left ,  top , 60,  48)){
+
+                  if(uistate.hotitem==num )
+                  this.height.push( {
+                     type: 'HOT_ITEM', id: 0
+                   })
+
+
+      }
+
 
 
 
@@ -232,24 +231,32 @@ desenhaButao(num,top,left){
     }}>{num}</div>)
 }
 
-  desenhaMenu(){
-    return(<div>
-      {this.desenhaButao(1,300,100)}
-      {this.desenhaButao("ya",300,160)}
-      {this.desenhaButao("no",300,220)}
+desenhaMenu(){
+  return(<div>
+    {this.desenhaButao(1,400,100)}
+    {this.desenhaButao("ya",400,160)}
+    {this.desenhaButao("no",400,220)}
 
-      {/*
-            <Menu
-              menuStore={visibleTodos}
-              onTodoClick={nome =>{
-                dispatch(escolhePagina(nome))
-              }} />
+    {/*
+          <Menu
+            menuStore={visibleTodos}
+            onTodoClick={nome =>{
+              dispatch(escolhePagina(nome))
+            }} />
 
-      */}      </div>)
+    */}      </div>)
 
-  }
+}
 
-  render ( element,  container) {
+
+
+  render () {
+
+
+
+
+
+
 
     // Thanks to our @connect decorator, we're able to get the data previously selected through the props.
     var { frozen, time, reduxState } = this.props
@@ -260,8 +267,12 @@ desenhaButao(num,top,left){
           disabled: true
         }
     }
+
     return (
-      <div>
+      <div    style={{MozUserSelect: "-moz-none",
+   KhtmlUserSelect: "none",
+   WebkitUserSelect: "none",userSelect: "none"}}
+>
         <h1>Provider and @connect example</h1>
         <span>
           <b>What time is it?</b> { time ? `It is currently ${time}` : 'No idea yet...' }
@@ -279,4 +290,4 @@ desenhaButao(num,top,left){
   }
 }
 
-// Go to ./13_final-words.js for our last advice about what to do now...
+// Go to ./final-words.jsx for our last advice about what to do now...

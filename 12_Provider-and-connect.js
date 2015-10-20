@@ -6,7 +6,7 @@
 
 // All explanations for this example are inlined in the sources inside ./12_src/src/.
 
-// Once you've read the lines below, start with 12_src/src/server.js.
+// Once you've read few line below, start with 12_src/src/server.js.
 
 // To build our React application and serve it to a browser, we'll use:
 // - A very simple node HTTP server (https://nodejs.org/api/http.html)
@@ -17,9 +17,6 @@
 //     project of Dan Abramov - just in case, he is Redux's author) to have a crazy
 //     DX (Developer experience) by having our components live-reload in the browser
 //     while we're tweaking them in our code editor.
-
-// An important point for those of you who are already using React: this application is built
-// upon React 0.14.
 
 // I won't detail Webpack Dev Server and React Hot Loader setup here since it's done pretty
 // well in React Hot Loader's docs.
@@ -36,7 +33,7 @@ webpackDevServer.listen(port)
 // ... and our main app server.
 server.listen(port)
 
-console.log(`Server is listening on http://127.0.0.1:${port}`)
+console.log(`Server is listening on 127.0.0.1:${port}`)
 
 // Go to 12_src/src/server.js...
 

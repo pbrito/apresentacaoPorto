@@ -37,14 +37,6 @@ export function _time(state = initialTimeState, action) {
   }
 }
 
-// (uistate.mousedown == 0)
-//   {
-//     uistate.activeitem = 0;
-//   }
-//   else
-//   {
-//     if (uistate.activeitem == 0)
-//       uistate.activeitem = -1;
 
 export function mouseReducer(state = {mousex: 0,mousey:0}, action) {
     console.log('userReducer was called with state', state, 'and action', action)
