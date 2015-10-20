@@ -81,7 +81,7 @@ import * as actionCreators from './action-creators'
 export default class Home extends React.Component {
   constructor(props) {
    super(props);
-    this.height =undefined;
+    this.height =[];
  }
 
   onTimeButtonClick () {
@@ -111,15 +111,17 @@ componentDidUpdate(){
 
 console.log("iiieieeiieee");
 console.log( this.height );
-if(this.height)
-{this.props.dispatch(this.height )
-this.height=undefined
+if(this.height.length>0)
+{
+  this.height.map( act =>
+    this.props.dispatch(act)
+  )
 }
-
+this.height=[]
      console.log("###111#########");
 };
 
-desenhaButao(num,top,left,width){
+desenhaButao(num,top,left){
 
   //this.props.dispatch( {
     //    type: 'HOT_ITEM', id: "id"
@@ -127,36 +129,95 @@ desenhaButao(num,top,left,width){
 
 
     var uistate=this.props.reduxState.mouseReducer;
+  //
+  //
+  // if (this.regionhit ( left ,  top , 60,  48)){
+  //     if(uistate.hotitem!==num )
+  //       this.height.push( {
+  //                    type: 'HOT_ITEM', id: num
+  //                  })
+  //  if (uistate.mousedown){
+  //    if(uistate.activeitem!==num )
+  //     {
+  //       console.log("@@"+uistate.activeitem);
+  //        this.height.push( {
+  //               type: 'ACTIVE_ITEM', id: num
+  //             })}
+  //           }
+  // }
 
-  if( uistate.hotitem!==undefined
-  || (uistate.hotitem==undefined && this.regionhit ( 100,  300,  50,  49))
-  )
-  {     if (this.regionhit ( 100,  300,  50,  49) && uistate.hotitem!=="id2")
-        {
-          this.height=( {
-               type: 'HOT_ITEM', id: "id2"
-             })
-        }else
-          if (this.regionhit ( 160,  300,  50,  49) && uistate.hotitem!=="id3")
-           {
-             this.height=( {
-                  type: 'HOT_ITEM', id: "id3"
-                })
-           }
 
-         else {
-         }
+
+
+//_________________
+
+
+  if (uistate.activeitem == num)
+    {  if (uistate.mouseup)
+          if(uistate.hotitem==num )  console.log("oi")
+           if(uistate.activeitem!==num )
+            this.height.push( {
+                   type: 'ACTIVE_ITEM', id: undefined
+                 })
+
+    }
+  else{
+      if(uistate.hotitem==num )
+          if (uistate.mousedown){
+             if(uistate.activeitem!==num )
+              this.height.push( {
+                     type: 'ACTIVE_ITEM', id: num
+                   })
+          }
   }
 
+  if (this.regionhit ( left ,  top , 60,  48)){
+       if(uistate.hotitem!==num )
+                this.height.push( {
+                   type: 'HOT_ITEM', id: num
+                 })
 
- if (this.regionhit( left,top, width, 49))
+    }
+
+
+
+    var cor;
+
+
+          if (uistate.activeitem == num)
+          {
+                if (uistate.hotitem == num)
+              {
+                // Button is merely 'hot'
+                  cor="brown"
+              }else
+                // Button is both 'hot' and 'active'
+                  cor="yellow";
+          }
+
+
+        else
+        {
+              if (uistate.hotitem == num)
+            {
+              // Button is merely 'hot'
+                cor="green"
+            }else
+          // button is not hot, but it may be active
+           cor="blue"
+        }
+
+
+
+
+ //if (this.regionhit( left,top, width, 49))
  return(
    <div style={{position: "absolute",
    top: top+"px",
    left: left+"px",
-   backgroundColor: "blue",
-   width: width+"px",
-   height: "50px",
+   backgroundColor: cor,
+   width: 64+"px",
+   height: "48px",
    textAlign: "center"
    }}>{num}</div>)
 
@@ -165,17 +226,17 @@ desenhaButao(num,top,left,width){
     top: top+"px",
     left: left+"px",
     backgroundColor: "red",
-    width: width+"px",
-    height: "50px",
+    width: 64+"px",
+    height: "48px",
     textAlign: "center"
     }}>{num}</div>)
 }
 
   desenhaMenu(){
     return(<div>
-      {this.desenhaButao(1,300,100,50)}
-      {this.desenhaButao("ya",300,160,50)}
-      {this.desenhaButao("no",300,220,50)}
+      {this.desenhaButao(1,300,100)}
+      {this.desenhaButao("ya",300,160)}
+      {this.desenhaButao("no",300,220)}
 
       {/*
             <Menu

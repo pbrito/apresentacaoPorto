@@ -76,7 +76,7 @@ export function mouseReducer(state = {mousex: 0,mousey:0}, action) {
             case 'ACTIVE_ITEM':
               return {
                 ...state,
-                activeitem :"action.id"
+                activeitem :action.id
               }
           default:
             return state;
