@@ -231,26 +231,50 @@ console.log("xxxxx"+uistate.mousex+uistate.mousey);
     }}>{num}</div>)
 }
 
-desenhaMenu(){
-    var {reduxState } = this.props
 
-var buts=reduxState.pagina[0].menu.map(
-  a=>{
-    return this.desenhaButao(a.Butao[0],a.Butao[1],a.Butao[2])
+desenhaTexto(top,left,text){
+  return(
+  <div style={{position: "absolute",
+  top: top+"px",
+  left: left+"px",
+backgroundColor:"red"}}><h1>{text.slice(0,15)} </h1>
+<h1>{text.slice(15,75)} </h1>
+  </div>
+  )
+}
+
+doOverlap( rect1 , rect2){
+  if (rect1.x < rect2.x + rect2.width &&
+   rect1.x + rect1.width > rect2.x &&
+   rect1.y < rect2.y + rect2.height &&
+   rect1.height + rect1.y > rect2.y) {
+    // collision detected!
+    return true;
   }
-)
-  return(<div>
+  return false;
+}
 
-    {(buts)}
+desenhaMenu(){
+  if(bo)   return( this.desenhaTexto(300,200,"Learn some Math you Dumb designers"))
 
-    {/*
-          <Menu
-            menuStore={visibleTodos}
-            onTodoClick={nome =>{
-              dispatch(escolhePagina(nome))
-            }} />
+  var {reduxState } = this.props
 
-    */}      </div>)
+  var buts=reduxState.pagina[0].menu.map(
+    a=> this.desenhaButao(a.Butao[0],a.Butao[1],a.Butao[2])
+  )
+ var a=reduxState.pagina[0].menu[2]
+
+  var b=reduxState.pagina[0].menu[3]
+
+  var bo=this.doOverlap({y:a.Butao[1],x:a.Butao[2],width: 64,height: 48},
+                        {y:b.Butao[1],x:b.Butao[2],width: 64,height: 48})
+
+
+
+
+  return(
+    <div>{(buts)}</div>
+  )
 
 }
 
