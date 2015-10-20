@@ -232,10 +232,16 @@ console.log("xxxxx"+uistate.mousex+uistate.mousey);
 }
 
 desenhaMenu(){
+    var {reduxState } = this.props
+
+var buts=reduxState.pagina[0].menu.map(
+  a=>{
+    return this.desenhaButao(a.Butao[0],a.Butao[1],a.Butao[2])
+  }
+)
   return(<div>
-    {this.desenhaButao(1,400,100)}
-    {this.desenhaButao("ya",400,160)}
-    {this.desenhaButao("no",400,220)}
+
+    {(buts)}
 
     {/*
           <Menu
@@ -251,13 +257,6 @@ desenhaMenu(){
 
 
   render () {
-
-
-
-
-
-
-
     // Thanks to our @connect decorator, we're able to get the data previously selected through the props.
     var { frozen, time, reduxState } = this.props
     var attrs = {}

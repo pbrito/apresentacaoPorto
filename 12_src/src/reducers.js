@@ -74,3 +74,15 @@ export function mouseReducer(state = {mousex: 0,mousey:0}, action) {
             return state;
     }
 }
+
+
+export function pagina(state = [{menu:[
+                               {Butao:[1,400,200]},
+                                {Butao:["a",400,260]},
+                                {Butao:["b",400,320]},
+                                {Butao:["c",400,380]}]}], action) {
+  switch (action.type) {
+    default:
+      return state
+  }
+}
