@@ -97,35 +97,9 @@ this.height=[]
 
 desenhaButao(num,top,left){
 
-  //this.props.dispatch( {
-    //    type: 'HOT_ITEM', id: "id"
-    //  })
-
-
     var uistate=this.props.reduxState.mouseReducer;
-  //
-  //
-  // if (this.regionhit ( left ,  top , 60,  48)){
-  //     if(uistate.hotitem!==num )
-  //       this.height.push( {
-  //                    type: 'HOT_ITEM', id: num
-  //                  })
-  //  if (uistate.mousedown){
-  //    if(uistate.activeitem!==num )
-  //     {
-  //       console.log("@@"+uistate.activeitem);
-  //        this.height.push( {
-  //               type: 'ACTIVE_ITEM', id: num
-  //             })}
-  //           }
-  // }
 
 
-
-
-//_________________
-
-console.log("xxxxx"+uistate.mousex+uistate.mousey);
   if (uistate.activeitem == num)
     {  if (uistate.mouseup)
           {
@@ -173,15 +147,11 @@ console.log("xxxxx"+uistate.mousex+uistate.mousey);
                   this.height.push( {
                      type: 'HOT_ITEM', id: 0
                    })
-
-
       }
 
 
 
-
     var cor;
-
 
           if (uistate.activeitem == num)
           {
@@ -193,7 +163,6 @@ console.log("xxxxx"+uistate.mousex+uistate.mousey);
                 // Button is both 'hot' and 'active'
                   cor="yellow";
           }
-
 
         else
         {
@@ -249,14 +218,7 @@ desenhaMenu(){
 }
 
 
-
   render () {
-
-
-
-
-
-
 
     // Thanks to our @connect decorator, we're able to get the data previously selected through the props.
     var { frozen, time, reduxState } = this.props
@@ -270,9 +232,8 @@ desenhaMenu(){
 
     return (
       <div    style={{MozUserSelect: "-moz-none",
-   KhtmlUserSelect: "none",
-   WebkitUserSelect: "none",userSelect: "none"}}
->
+                      KhtmlUserSelect: "none",
+                      WebkitUserSelect: "none",userSelect: "none"}}>
         <h1>Provider and @connect example</h1>
         <span>
           <b>What time is it?</b> { time ? `It is currently ${time}` : 'No idea yet...' }
@@ -284,7 +245,6 @@ desenhaMenu(){
         <pre>
           redux state = { JSON.stringify(reduxState, null, 2) }
         </pre>
-        {this.desenhaMenu()}
       </div>
     )
   }
